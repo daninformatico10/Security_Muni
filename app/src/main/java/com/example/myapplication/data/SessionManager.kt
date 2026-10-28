@@ -15,7 +15,7 @@ class SessionManager(context: Context) {
         context.applicationContext.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
 
     /** Indica si existe una sesión iniciada previamente. */
-    fun isLoggedIn(): Boolean = prefs.getBoolean(KEY_LOGGED_IN, false)
+    fun isLoggedIn(): Boolean = prefs.getBoolean(KEY_LOGGED_IN, true)
 
     /** Nombre del usuario con sesión activa (o null si no hay sesión). */
     fun getUsername(): String? = prefs.getString(KEY_USERNAME, null)

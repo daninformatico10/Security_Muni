@@ -389,7 +389,7 @@ private fun HeaderSection() {
         Spacer(modifier = Modifier.height(12.dp))
 
         Text(
-            text = "SegurApp",
+            text = "Security Muni",
             style = MaterialTheme.typography.headlineMedium,
             fontWeight = FontWeight.ExtraBold,
             color = MaterialTheme.colorScheme.primary

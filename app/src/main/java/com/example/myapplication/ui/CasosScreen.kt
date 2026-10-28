@@ -126,7 +126,7 @@ fun CasosScreen(
                 title = {
                     Column {
                         Text(
-                            text = "SegurApp - San Joaquín",
+                            text = "Security Muni - San Joaquín",
                             style = MaterialTheme.typography.titleMedium,
                             fontWeight = FontWeight.Bold
                         )

@@ -1,3 +1,5 @@
+package com.example.myapplication.ui
+
 import android.Manifest
 import android.graphics.Bitmap
 import android.net.Uri

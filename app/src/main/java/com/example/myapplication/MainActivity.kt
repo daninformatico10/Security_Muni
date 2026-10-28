@@ -20,6 +20,8 @@ class MainActivity : ComponentActivity() {
         setContent {
             MyApplicationTheme {
                 SegurAppApp()
+
+
             }
         }
     }
