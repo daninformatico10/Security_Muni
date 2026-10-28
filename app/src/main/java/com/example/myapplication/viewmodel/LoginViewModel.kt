@@ -1,6 +1,8 @@
 package com.example.myapplication.viewmodel
 
-import androidx.lifecycle.ViewModel
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
+import com.example.myapplication.data.SessionManager
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -32,10 +34,16 @@ data class LoginUiState(
  * Sigue el patrón MVVM, manteniendo la lógica de validación e inicio de sesión totalmente
  * desacoplada de la vista (Jetpack Compose UI).
  */
-class LoginViewModel : ViewModel() {
+class LoginViewModel(application: Application) : AndroidViewModel(application) {
 
-    // Estado reactivo privado para modificación interna
-    private val _uiState = MutableStateFlow(LoginUiState())
+    // Persistencia de la sesión en almacenamiento local
+    private val sessionManager = SessionManager(application)
+
+    // Estado reactivo privado para modificación interna.
+    // Si existe una sesión guardada, la app inicia directamente en el panel.
+    private val _uiState = MutableStateFlow(
+        LoginUiState(isLoginSuccessful = sessionManager.isLoggedIn())
+    )
     // Estado reactivo público e inmutable consumido por la UI mediante StateFlow
     val uiState: StateFlow<LoginUiState> = _uiState.asStateFlow()
 
@@ -112,6 +120,8 @@ class LoginViewModel : ViewModel() {
 
         // Validar credenciales contra el usuario predeterminado
         if ((currentUsername == defaultUsername) && (currentPassword == defaultPassword)) {
+            // Persistir la sesión para que se mantenga al cerrar y reabrir la app
+            sessionManager.saveSession(currentUsername)
             _uiState.update { currentState ->
                 currentState.copy(
                     usernameError = null,
@@ -134,7 +144,16 @@ class LoginViewModel : ViewModel() {
     }
 
     /**
-     * Cierra sesión o reinicia el estado del formulario.
+     * Cierra la sesión: elimina la sesión persistida y vuelve a la pantalla de login
+     * con el formulario limpio.
+     */
+    fun logout() {
+        sessionManager.clearSession()
+        _uiState.value = LoginUiState()
+    }
+
+    /**
+     * Reinicia el estado del formulario de login.
      */
     fun resetState() {
         _uiState.value = LoginUiState()

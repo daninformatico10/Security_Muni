@@ -6,6 +6,8 @@
    See https://developer.android.com/about/versions/12/backup-restore
 -->
 <full-backup-content>
+    <!-- La sesión no se respalda: evita restaurar un login en otro dispositivo -->
+    <exclude domain="sharedpref" path="segurapp_session.xml" />
     <!--
    <include domain="sharedpref" path="."/>
    <exclude domain="sharedpref" path="device.xml"/>

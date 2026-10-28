@@ -27,7 +27,8 @@ class MainActivity : ComponentActivity() {
 
 /**
  * Flujo principal de la aplicación SegurApp:
- * Si el usuario inicia sesión correctamente, navega al panel [CasosScreen].
+ * Si el usuario inicia sesión correctamente (o ya tenía una sesión guardada), navega al panel [CasosScreen].
+ * Al cerrar sesión se vuelve a [LoginScreen].
  */
 @Composable
 fun SegurAppApp(
@@ -36,7 +37,7 @@ fun SegurAppApp(
     val loginState by loginViewModel.uiState.collectAsState()
 
     if (loginState.isLoginSuccessful) {
-        CasosScreen()
+        CasosScreen(onLogout = loginViewModel::logout)
     } else {
         LoginScreen(viewModel = loginViewModel)
     }
