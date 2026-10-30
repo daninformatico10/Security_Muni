@@ -41,7 +41,6 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.myapplication.ui.theme.MyApplicationTheme
 import com.example.myapplication.viewmodel.LoginUiState
@@ -316,19 +315,13 @@ fun LoginContent(
                     }
 
                     // Botón de acción principal para Iniciar Sesión
-                    Button(
-                        onClick = onLoginClick,
+                    BotonCargando(
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(50.dp),
-                        shape = RoundedCornerShape(12.dp)
-                    ) {
-                        Text(
-                            text = "INGRESAR",
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 16.sp
-                        )
-                    }
+                        texto = "INGRESAR",
+                        onClick = onLoginClick
+                    )
 
                     // Botón secundario para limpiar o reiniciar el estado
                     if (uiState.isLoginSuccessful || uiState.generalError != null || uiState.usernameError != null || uiState.passwordError != null) {
