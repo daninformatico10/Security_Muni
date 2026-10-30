@@ -30,4 +30,5 @@ data class CasoSeguridad(
     val latitud: Double? = null,
     val longitud: Double? = null,
     val fotoUri: String? = null,
+    val estado: String = "Pendiente"
 )

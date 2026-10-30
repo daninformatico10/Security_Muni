@@ -182,6 +182,26 @@ class CasosViewModel : ViewModel() {
     /**
      * Limpia los campos del formulario de registro.
      */
+
+    fun cambiarEstadoCaso(id: String) {
+        _casos.value = _casos.value.map { caso ->
+
+            if (caso.id == id) {
+
+                caso.copy(
+                    estado = when (caso.estado) {
+                        "Pendiente" -> "En evaluación"
+                        "En evaluación" -> "Cerrado"
+                        "Cerrado" -> "Pendiente"
+                        else -> "Pendiente"
+                    }
+                )
+
+            } else {
+                caso
+            }
+        }
+    }
     fun limpiarFormulario() {
         _formularioState.value = FormularioCasoUiState()
     }

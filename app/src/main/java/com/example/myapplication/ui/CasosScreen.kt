@@ -202,7 +202,10 @@ fun CasosScreen(
 
             // Contenido de la pestaña activa
             when (selectedTabIndex) {
-                0 -> DashboardCasos(casos = casos)
+                0 ->  DashboardCasos(
+                casos = casos,
+                onCambiarEstado = viewModel::cambiarEstadoCaso
+            )
                 1 -> FormularioRegistroCaso(
                     formState = formularioState,
                     onTituloChanged = viewModel::onTituloChanged,
@@ -241,7 +244,9 @@ fun CasosScreen(
 @Composable
 fun DashboardCasos(
     casos: List<CasoSeguridad>,
+    onCambiarEstado: (String) -> Unit,
     modifier: Modifier = Modifier
+
 ) {
     Scaffold(
         modifier = modifier.fillMaxSize()
@@ -278,7 +283,10 @@ fun DashboardCasos(
                 }
 
                 items(casos, key = { it.id }) { caso ->
-                    TarjetaCasoItem(caso = caso)
+                    TarjetaCasoItem(
+                        caso = caso,
+                        onCambiarEstado = onCambiarEstado
+                    )
                 }
 
                 item {
@@ -295,8 +303,10 @@ fun DashboardCasos(
 @Composable
 fun TarjetaCasoItem(
     caso: CasoSeguridad,
+    onCambiarEstado: (String) -> Unit,
     modifier: Modifier = Modifier
-) {
+)
+ {
     val iconoCategoria = obtenerIconoPorCategoria(caso.categoria)
     val colorBadge = obtenerColorPorCategoria(caso.categoria)
 
@@ -370,6 +380,20 @@ fun TarjetaCasoItem(
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            Text(
+                text = when(caso.estado) {
+                    "Pendiente" -> "🟡 Estado: Pendiente"
+                    "En evaluación" -> "🔵 Estado: En evaluación"
+                    "Cerrado" -> "🟢 Estado: Cerrado"
+                    else -> "⚪ Estado: ${caso.estado}"
+                },
+                fontWeight = FontWeight.Bold
+            )
+
+
 
             // Fila inferior con etiquetas de GPS y Foto si aplican
             if (caso.latitud != null || caso.fotoUri != null) {
@@ -675,19 +699,13 @@ fun FormularioRegistroCaso(
                 Spacer(modifier = Modifier.height(8.dp))
 
                 // Botón principal de guardado del incidente
-                Button(
-                    onClick = onGuardarCasoClick,
+                BotonCargando(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(50.dp),
-                    shape = RoundedCornerShape(12.dp)
-                ) {
-                    Text(
-                        text = "REGISTRAR INCIDENTE",
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 15.sp
-                    )
-                }
+                    texto = "REGISTRAR INCIDENTE",
+                    onClick = onGuardarCasoClick
+                )
 
                 OutlinedButton(
                     onClick = onLimpiarClick,
@@ -746,13 +764,16 @@ fun DashboardCasosPreview() {
                     longitud = -70.6272,
                     fotoUri = "foto.jpg"
                 ),
+
                 CasoSeguridad(
                     id = "CASO-002",
                     titulo = "Perro extraviado en plaza",
                     descripcion = "Mascota vista rondando sin collar cerca del parque central.",
                     categoria = CategoriaCaso.PERRO_PERDIDO
                 )
-            )
+            ),
+            onCambiarEstado = {}
+
         )
     }
 }
